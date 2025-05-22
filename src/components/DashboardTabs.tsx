@@ -17,7 +17,7 @@ const DashboardTabs: React.FC<DashboardTabsProps> = ({ activeTab, onTabChange })
           activeTab === 'analytics' && "font-medium"
         )}
       >
-        Clinics Dashboard
+        Analytics Dashboard
         {activeTab === 'analytics' && (
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-orange-500"></div>
         )}
@@ -29,7 +29,7 @@ const DashboardTabs: React.FC<DashboardTabsProps> = ({ activeTab, onTabChange })
           activeTab === 'clinics' && "font-medium"
         )}
       >
-        Analytics Dashboard
+        Clinics Dashboard
         {activeTab === 'clinics' && (
           <div className="absolute bottom-0 left-0 right-0 h-1 bg-orange-500"></div>
         )}

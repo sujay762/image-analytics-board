@@ -60,7 +60,7 @@ const AnalyticsContent: React.FC = () => {
         console.error("Failed to fetch analytics data:", error);
         toast({
           title: "Error loading data",
-          description: "Failed to fetch analytics data. Please try again later.",
+          description: "Failed to fetch analytics data. Using sample data instead.",
           variant: "destructive",
         });
         
@@ -133,30 +133,27 @@ const AnalyticsContent: React.FC = () => {
       <div className="flex flex-wrap gap-2 mb-6">
         <Button 
           onClick={() => setActiveSection('consultations')}
-          variant={activeSection === 'consultations' ? "default" : "outline"}
           className={activeSection === 'consultations' 
-            ? "bg-orange-500 hover:bg-orange-600 text-white" 
-            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+            ? "bg-orange-500 hover:bg-orange-600 text-white rounded-md" 
+            : "bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-md"
           }
         >
           Consultations
         </Button>
         <Button 
           onClick={() => setActiveSection('demographic')}
-          variant={activeSection === 'demographic' ? "default" : "outline"}
           className={activeSection === 'demographic' 
-            ? "bg-orange-500 hover:bg-orange-600 text-white" 
-            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+            ? "bg-orange-500 hover:bg-orange-600 text-white rounded-md" 
+            : "bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-md"
           }
         >
           Demographic
         </Button>
         <Button 
           onClick={() => setActiveSection('rx-analytics')}
-          variant={activeSection === 'rx-analytics' ? "default" : "outline"}
           className={activeSection === 'rx-analytics' 
-            ? "bg-orange-500 hover:bg-orange-600 text-white" 
-            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+            ? "bg-orange-500 hover:bg-orange-600 text-white rounded-md" 
+            : "bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-md"
           }
         >
           Rx Analytics

@@ -23,9 +23,9 @@ const Analytics: React.FC = () => {
       </div>
 
       {activeTab === 'analytics' ? (
-        <AnalyticsContent />
-      ) : (
         <ClinicsContent />
+      ) : (
+        <AnalyticsContent />
       )}
 
       <Dialog open={filterOpen} onOpenChange={setFilterOpen}>

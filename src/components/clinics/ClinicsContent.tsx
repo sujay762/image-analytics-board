@@ -63,7 +63,7 @@ const ClinicsContent: React.FC = () => {
         console.error(`Failed to fetch ${activeSection} data:`, error);
         toast({
           title: "Error loading data",
-          description: `Failed to fetch ${activeSection} data. Please try again later.`,
+          description: `Failed to fetch ${activeSection} data. Using sample data instead.`,
           variant: "destructive",
         });
         
@@ -126,75 +126,59 @@ const ClinicsContent: React.FC = () => {
     }
   };
 
-  const getButtonClass = (section: ActiveSection) => {
-    return activeSection === section
-      ? "bg-orange-500 text-white py-2 px-4 rounded"
-      : "bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300";
-  };
-
-  const calculateTotal = (data: BillingData[]): number => {
-    return data.reduce((sum, item) => sum + item.amount, 0);
-  };
-
   return (
     <div>
       <div className="flex flex-wrap gap-2 mb-6 overflow-x-auto">
         <Button 
           onClick={() => setActiveSection('appointment')}
-          variant={activeSection === 'appointment' ? "default" : "outline"}
           className={activeSection === 'appointment' 
-            ? "bg-orange-500 hover:bg-orange-600 text-white" 
-            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+            ? "bg-orange-500 hover:bg-orange-600 text-white rounded-md" 
+            : "bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-md"
           }
         >
           Appointment
         </Button>
         <Button 
           onClick={() => setActiveSection('rx')}
-          variant={activeSection === 'rx' ? "default" : "outline"}
           className={activeSection === 'rx' 
-            ? "bg-orange-500 hover:bg-orange-600 text-white" 
-            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+            ? "bg-orange-500 hover:bg-orange-600 text-white rounded-md" 
+            : "bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-md"
           }
         >
           Rx
         </Button>
         <Button 
           onClick={() => setActiveSection('opd-billing')}
-          variant={activeSection === 'opd-billing' ? "default" : "outline"}
           className={activeSection === 'opd-billing' 
-            ? "bg-orange-500 hover:bg-orange-600 text-white" 
-            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+            ? "bg-orange-500 hover:bg-orange-600 text-white rounded-md" 
+            : "bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-md"
           }
         >
           OPD Billing
         </Button>
         <Button 
           onClick={() => setActiveSection('ipd-billing')}
-          variant={activeSection === 'ipd-billing' ? "default" : "outline"}
           className={activeSection === 'ipd-billing' 
-            ? "bg-orange-500 hover:bg-orange-600 text-white" 
-            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+            ? "bg-orange-500 hover:bg-orange-600 text-white rounded-md" 
+            : "bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-md"
           }
         >
           IPD Billing
         </Button>
         <Button 
           onClick={() => setActiveSection('pharmacy-billing')}
-          variant={activeSection === 'pharmacy-billing' ? "default" : "outline"}
           className={activeSection === 'pharmacy-billing' 
-            ? "bg-orange-500 hover:bg-orange-600 text-white" 
-            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+            ? "bg-orange-500 hover:bg-orange-600 text-white rounded-md" 
+            : "bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-md"
           }
         >
           Pharmacy Billing
         </Button>
         <Button 
           onClick={() => setActiveSection('ipd-registration')}
-          variant={activeSection === 'ipd-registration' ? "default" : "outline"}
           className={activeSection === 'ipd-registration' 
-            ? "bg-orange-500 hover:bg-orange-600 text-white" 
-            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+            ? "bg-orange-500 hover:bg-orange-600 text-white rounded-md" 
+            : "bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-md"
           }
         >
           IPD Registration
@@ -264,6 +248,11 @@ const ClinicsContent: React.FC = () => {
       )}
     </div>
   );
+
+  // Helper function to calculate total
+  function calculateTotal(data: BillingData[]): number {
+    return data.reduce((sum, item) => sum + item.amount, 0);
+  }
 };
 
 export default ClinicsContent;
