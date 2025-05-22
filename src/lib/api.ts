@@ -1,4 +1,3 @@
-
 // API Integration
 const API_URL = import.meta.env.VITE_API_URL || "http://199.192.26.248:8000";
 const API_KEY = import.meta.env.VITE_API_KEY || "";
@@ -23,8 +22,10 @@ export async function fetchData<T>({ endpoint, params = {}, method = 'GET', body
     method,
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${API_KEY}`
-    }
+      'Authorization': API_KEY ? `Bearer ${API_KEY}` : ''
+    },
+    mode: 'cors',
+    credentials: 'include'
   };
   
   if (body && (method === 'POST' || method === 'PUT')) {
@@ -32,6 +33,7 @@ export async function fetchData<T>({ endpoint, params = {}, method = 'GET', body
   }
   
   try {
+    console.log(`Fetching from: ${url.toString()}`);
     const response = await fetch(url.toString(), options);
     
     if (!response.ok) {
@@ -120,29 +122,39 @@ export interface DiagnosisData {
 export const APIs = {
   // Analytics Dashboard (former Clinics Dashboard)
   getConsultationData: (startDate: string, endDate: string, clinicId?: string) => {
-    const baseUrl = '/sap/opu/odata/sap/ZCDS_C_PRESCRIPTION_LIST_CDS/ZCDS_C_PRESCRIPTION_LIST';
-    let filter = `DoctorID eq guid'${DOCTOR_ID}' and PrescriptionDate ge '${startDate}' and PrescriptionDate le '${endDate}' and IPDID eq guid'00000000-0000-0000-0000-000000000000' and PrescriptionDate ne ''`;
-    
-    if (clinicId) {
-      filter = `(ClinicID eq guid'${clinicId}' or AppointmentClinicID eq guid'${clinicId}') and DoctorID eq guid'${DOCTOR_ID}' and PrescriptionDate ge '${startDate}' and PrescriptionDate le '${endDate}' and PrescriptionDate ne ''`;
+    try {
+      const baseUrl = '/sap/opu/odata/sap/ZCDS_C_PRESCRIPTION_LIST_CDS/ZCDS_C_PRESCRIPTION_LIST';
+      let filter = `DoctorID eq guid'${DOCTOR_ID}' and PrescriptionDate ge '${startDate}' and PrescriptionDate le '${endDate}' and IPDID eq guid'00000000-0000-0000-0000-000000000000' and PrescriptionDate ne ''`;
+      
+      if (clinicId) {
+        filter = `(ClinicID eq guid'${clinicId}' or AppointmentClinicID eq guid'${clinicId}') and DoctorID eq guid'${DOCTOR_ID}' and PrescriptionDate ge '${startDate}' and PrescriptionDate le '${endDate}' and PrescriptionDate ne ''`;
+      }
+      
+      return fetchData<ConsultationData[]>({ 
+        endpoint: `${baseUrl}?$filter=${filter}&$select=PrescriptionDate,UserID,Gender,Age,AgeUnit,DOB`
+      });
+    } catch (error) {
+      console.error("Error in getConsultationData:", error);
+      throw error;
     }
-    
-    return fetchData<ConsultationData[]>({ 
-      endpoint: `${baseUrl}?$filter=${filter}&$select=PrescriptionDate,UserID,Gender,Age,AgeUnit,DOB`
-    });
   },
   
   getPatientData: (startDate: string, endDate: string, clinicId?: string) => {
-    const baseUrl = '/sap/opu/odata/sap/ZCDS_C_DOCTOR_CDS/ZCDS_C_DOCTOR_APPOINTMENT';
-    let filter = `DoctorID eq guid'${DOCTOR_ID}' and AppointmentDate ge '${startDate}' and AppointmentDate le '${endDate}' and AppointmentDate ne '' and BookingStatus eq 'D' and FollowUp eq true`;
-    
-    if (clinicId) {
-      filter = `ClinicID eq guid'${clinicId}' and DoctorID eq guid'${DOCTOR_ID}' and AppointmentDate ge '${startDate}' and AppointmentDate le '${endDate}' and AppointmentDate ne '' and BookingStatus eq 'D' and FollowUp eq true`;
+    try {
+      const baseUrl = '/sap/opu/odata/sap/ZCDS_C_DOCTOR_CDS/ZCDS_C_DOCTOR_APPOINTMENT';
+      let filter = `DoctorID eq guid'${DOCTOR_ID}' and AppointmentDate ge '${startDate}' and AppointmentDate le '${endDate}' and AppointmentDate ne '' and BookingStatus eq 'D' and FollowUp eq true`;
+      
+      if (clinicId) {
+        filter = `ClinicID eq guid'${clinicId}' and DoctorID eq guid'${DOCTOR_ID}' and AppointmentDate ge '${startDate}' and AppointmentDate le '${endDate}' and AppointmentDate ne '' and BookingStatus eq 'D' and FollowUp eq true`;
+      }
+      
+      return fetchData<PatientData[]>({ 
+        endpoint: `${baseUrl}?$filter=${filter}&$select=AppointmentDate,FollowUp`
+      });
+    } catch (error) {
+      console.error("Error in getPatientData:", error);
+      throw error;
     }
-    
-    return fetchData<PatientData[]>({ 
-      endpoint: `${baseUrl}?$filter=${filter}&$select=AppointmentDate,FollowUp`
-    });
   },
   
   getGenderData: () => fetchData<GenderData[]>({ endpoint: '/analytics/gender' }),

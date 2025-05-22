@@ -12,6 +12,7 @@ import RxChart from './RxChart';
 import BillingChart from './BillingChart';
 import RegistrationChart from './RegistrationChart';
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 
 type ActiveSection = 'appointment' | 'rx' | 'opd-billing' | 'ipd-billing' | 'pharmacy-billing' | 'ipd-registration';
 
@@ -138,42 +139,66 @@ const ClinicsContent: React.FC = () => {
   return (
     <div>
       <div className="flex flex-wrap gap-2 mb-6 overflow-x-auto">
-        <button 
+        <Button 
           onClick={() => setActiveSection('appointment')}
-          className={getButtonClass('appointment')}
+          variant={activeSection === 'appointment' ? "default" : "outline"}
+          className={activeSection === 'appointment' 
+            ? "bg-orange-500 hover:bg-orange-600 text-white" 
+            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+          }
         >
           Appointment
-        </button>
-        <button 
+        </Button>
+        <Button 
           onClick={() => setActiveSection('rx')}
-          className={getButtonClass('rx')}
+          variant={activeSection === 'rx' ? "default" : "outline"}
+          className={activeSection === 'rx' 
+            ? "bg-orange-500 hover:bg-orange-600 text-white" 
+            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+          }
         >
           Rx
-        </button>
-        <button 
+        </Button>
+        <Button 
           onClick={() => setActiveSection('opd-billing')}
-          className={getButtonClass('opd-billing')}
+          variant={activeSection === 'opd-billing' ? "default" : "outline"}
+          className={activeSection === 'opd-billing' 
+            ? "bg-orange-500 hover:bg-orange-600 text-white" 
+            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+          }
         >
           OPD Billing
-        </button>
-        <button 
+        </Button>
+        <Button 
           onClick={() => setActiveSection('ipd-billing')}
-          className={getButtonClass('ipd-billing')}
+          variant={activeSection === 'ipd-billing' ? "default" : "outline"}
+          className={activeSection === 'ipd-billing' 
+            ? "bg-orange-500 hover:bg-orange-600 text-white" 
+            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+          }
         >
           IPD Billing
-        </button>
-        <button 
+        </Button>
+        <Button 
           onClick={() => setActiveSection('pharmacy-billing')}
-          className={getButtonClass('pharmacy-billing')}
+          variant={activeSection === 'pharmacy-billing' ? "default" : "outline"}
+          className={activeSection === 'pharmacy-billing' 
+            ? "bg-orange-500 hover:bg-orange-600 text-white" 
+            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+          }
         >
           Pharmacy Billing
-        </button>
-        <button 
+        </Button>
+        <Button 
           onClick={() => setActiveSection('ipd-registration')}
-          className={getButtonClass('ipd-registration')}
+          variant={activeSection === 'ipd-registration' ? "default" : "outline"}
+          className={activeSection === 'ipd-registration' 
+            ? "bg-orange-500 hover:bg-orange-600 text-white" 
+            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+          }
         >
           IPD Registration
-        </button>
+        </Button>
       </div>
 
       {loading ? (

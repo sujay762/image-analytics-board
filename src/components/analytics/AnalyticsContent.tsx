@@ -16,6 +16,7 @@ import AgeChart from './AgeChart';
 import SymptomChart from './SymptomChart';
 import DiagnosisChart from './DiagnosisChart';
 import { useToast } from "@/hooks/use-toast";
+import { Button } from "@/components/ui/button";
 
 type ActiveSection = 'consultations' | 'demographic' | 'rx-analytics';
 
@@ -127,33 +128,39 @@ const AnalyticsContent: React.FC = () => {
     }
   };
 
-  const getButtonClass = (section: ActiveSection) => {
-    return activeSection === section
-      ? "bg-orange-500 text-white py-2 px-4 rounded"
-      : "bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300";
-  };
-
   return (
     <div>
       <div className="flex flex-wrap gap-2 mb-6">
-        <button 
+        <Button 
           onClick={() => setActiveSection('consultations')}
-          className={getButtonClass('consultations')}
+          variant={activeSection === 'consultations' ? "default" : "outline"}
+          className={activeSection === 'consultations' 
+            ? "bg-orange-500 hover:bg-orange-600 text-white" 
+            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+          }
         >
           Consultations
-        </button>
-        <button 
+        </Button>
+        <Button 
           onClick={() => setActiveSection('demographic')}
-          className={getButtonClass('demographic')}
+          variant={activeSection === 'demographic' ? "default" : "outline"}
+          className={activeSection === 'demographic' 
+            ? "bg-orange-500 hover:bg-orange-600 text-white" 
+            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+          }
         >
           Demographic
-        </button>
-        <button 
+        </Button>
+        <Button 
           onClick={() => setActiveSection('rx-analytics')}
-          className={getButtonClass('rx-analytics')}
+          variant={activeSection === 'rx-analytics' ? "default" : "outline"}
+          className={activeSection === 'rx-analytics' 
+            ? "bg-orange-500 hover:bg-orange-600 text-white" 
+            : "bg-gray-200 text-gray-800 border-0 hover:bg-gray-300"
+          }
         >
           Rx Analytics
-        </button>
+        </Button>
       </div>
 
       {loading ? (
