@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import AnalyticsHeader from '@/components/AnalyticsHeader';
 import DashboardTabs from '@/components/DashboardTabs';
 import FilterButton from '@/components/FilterButton';
-import ClinicsContent from '@/components/analytics/AnalyticsContent';
-import AnalyticsContent from '@/components/clinics/ClinicsContent';
+import AnalyticsContent from '@/components/analytics/AnalyticsContent';
+import ClinicsContent from '@/components/clinics/ClinicsContent';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 type TabType = 'analytics' | 'clinics';
@@ -23,9 +23,9 @@ const Analytics: React.FC = () => {
       </div>
 
       {activeTab === 'analytics' ? (
-        <ClinicsContent />
-      ) : (
         <AnalyticsContent />
+      ) : (
+        <ClinicsContent />
       )}
 
       <Dialog open={filterOpen} onOpenChange={setFilterOpen}>
