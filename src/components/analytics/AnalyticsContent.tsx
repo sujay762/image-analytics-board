@@ -16,7 +16,6 @@ import AgeChart from './AgeChart';
 import SymptomChart from './SymptomChart';
 import DiagnosisChart from './DiagnosisChart';
 import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
 
 type ActiveSection = 'consultations' | 'demographic' | 'rx-analytics';
 
@@ -31,7 +30,7 @@ const AnalyticsContent: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [dateRange, setDateRange] = useState({
     startDate: '20250201',
-    endDate: '20250411'
+    endDate: '20250523'
   });
   const { toast } = useToast();
 
@@ -46,9 +45,9 @@ const AnalyticsContent: React.FC = () => {
           const patients = await APIs.getPatientData(dateRange.startDate, dateRange.endDate);
           setPatientData(patients);
         } else if (activeSection === 'demographic') {
-          const gender = await APIs.getGenderData();
+          const gender = await APIs.getGenderData(dateRange.startDate, dateRange.endDate);
           setGenderData(gender);
-          const age = await APIs.getAgeData();
+          const age = await APIs.getAgeData(dateRange.startDate, dateRange.endDate);
           setAgeData(age);
         } else if (activeSection === 'rx-analytics') {
           const symptoms = await APIs.getSymptomData();
@@ -131,33 +130,21 @@ const AnalyticsContent: React.FC = () => {
   return (
     <div>
       <div className="flex flex-wrap gap-2 mb-6">
-        <Button 
-          onClick={() => setActiveSection('consultations')}
-          className={activeSection === 'consultations' 
-            ? "bg-orange-500 hover:bg-orange-600 text-white rounded-md" 
-            : "bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-md"
-          }
-        >
-          Consultations
-        </Button>
-        <Button 
-          onClick={() => setActiveSection('demographic')}
-          className={activeSection === 'demographic' 
-            ? "bg-orange-500 hover:bg-orange-600 text-white rounded-md" 
-            : "bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-md"
-          }
-        >
-          Demographic
-        </Button>
-        <Button 
-          onClick={() => setActiveSection('rx-analytics')}
-          className={activeSection === 'rx-analytics' 
-            ? "bg-orange-500 hover:bg-orange-600 text-white rounded-md" 
-            : "bg-gray-200 text-gray-800 hover:bg-gray-300 rounded-md"
-          }
-        >
-          Rx Analytics
-        </Button>
+        {['consultations', 'demographic', 'rx-analytics'].map((section) => (
+          <button 
+            key={section}
+            onClick={() => setActiveSection(section as ActiveSection)}
+            className={`
+              px-4 py-2 rounded-full text-sm font-medium
+              ${activeSection === section 
+                ? "bg-orange-500 hover:bg-orange-600 text-white"
+                : "bg-gray-100 text-gray-800 hover:bg-gray-200"}
+            `}
+          >
+            {section === 'consultations' ? 'Consultations' : 
+             section === 'demographic' ? 'Demographic' : 'Rx Analytics'}
+          </button>
+        ))}
       </div>
 
       {loading ? (
