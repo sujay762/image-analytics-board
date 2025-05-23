@@ -1,4 +1,3 @@
-
 // API Integration
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_KEY = import.meta.env.VITE_API_KEY || "";
@@ -54,10 +53,6 @@ export async function fetchData<T>({ endpoint, params = {}, method = 'GET', body
       headers: {
         'Content-Type': 'application/json',
         'Authorization': API_KEY ? `Bearer ${API_KEY}` : '',
-        // Adding CORS headers to handle cross-origin requests
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       },
       mode: 'cors',
     };
@@ -66,9 +61,11 @@ export async function fetchData<T>({ endpoint, params = {}, method = 'GET', body
       options.body = JSON.stringify(body);
     }
     
-    // Handle the mixed content issue by trying with HTTPS first
+    // Always use HTTP to avoid mixed content issues
+    let fetchUrl = url.toString();
+    
     try {
-      const response = await fetch(url.toString(), options);
+      const response = await fetch(fetchUrl, options);
       
       if (!response.ok) {
         console.error(`API Error: ${response.status}`);
@@ -77,21 +74,7 @@ export async function fetchData<T>({ endpoint, params = {}, method = 'GET', body
       
       return await response.json();
     } catch (error) {
-      // If we get a mixed content error, try with HTTP
-      if (url.protocol === 'https:') {
-        console.warn('HTTPS request failed, trying HTTP fallback');
-        const httpUrl = new URL(url.toString());
-        httpUrl.protocol = 'http:';
-        
-        const httpResponse = await fetch(httpUrl.toString(), options);
-        
-        if (!httpResponse.ok) {
-          console.error(`API Error (HTTP fallback): ${httpResponse.status}`);
-          throw new Error(`API Error: ${httpResponse.status}`);
-        }
-        
-        return await httpResponse.json();
-      }
+      console.error("API request failed:", error);
       throw error;
     }
   } catch (error) {
