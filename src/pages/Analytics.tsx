@@ -7,10 +7,10 @@ import AnalyticsContent from '@/components/analytics/AnalyticsContent';
 import ClinicsContent from '@/components/clinics/ClinicsContent';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
-type TabType = 'analytics' | 'clinics';
+type TabType = 'clinics' | 'analytics';
 
 const Analytics: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<TabType>('analytics');
+  const [activeTab, setActiveTab] = useState<TabType>('clinics');
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
 
   return (
@@ -22,10 +22,10 @@ const Analytics: React.FC = () => {
         <FilterButton onClick={() => setFilterOpen(true)} />
       </div>
 
-      {activeTab === 'analytics' ? (
-        <AnalyticsContent />
-      ) : (
+      {activeTab === 'clinics' ? (
         <ClinicsContent />
+      ) : (
+        <AnalyticsContent />
       )}
 
       <Dialog open={filterOpen} onOpenChange={setFilterOpen}>

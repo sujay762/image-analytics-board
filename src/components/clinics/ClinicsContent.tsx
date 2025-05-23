@@ -133,7 +133,7 @@ const ClinicsContent: React.FC = () => {
             key={section}
             onClick={() => setActiveSection(section as ActiveSection)}
             className={`
-              px-4 py-2 rounded-full text-sm font-medium
+              px-4 py-2 rounded-md text-sm font-medium
               ${activeSection === section 
                 ? "bg-orange-500 hover:bg-orange-600 text-white"
                 : "bg-gray-100 text-gray-800 hover:bg-gray-200"}

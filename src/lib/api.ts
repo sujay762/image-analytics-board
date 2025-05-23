@@ -28,32 +28,38 @@ type FetchOptions = {
 }
 
 export async function fetchData<T>({ endpoint, params = {}, method = 'GET', body }: FetchOptions): Promise<T> {
-  const url = new URL(endpoint);
-  
-  // Add query parameters
-  Object.keys(params).forEach(key => {
-    url.searchParams.append(key, params[key]);
-  });
-  
-  const options: RequestInit = {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': API_KEY ? `Bearer ${API_KEY}` : '',
-      // Adding CORS headers to handle cross-origin requests
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    },
-    mode: 'cors',
-  };
-  
-  if (body && (method === 'POST' || method === 'PUT')) {
-    options.body = JSON.stringify(body);
-  }
-  
   try {
+    // Check if the endpoint is valid
+    if (!endpoint) {
+      throw new Error('Invalid endpoint URL');
+    }
+    
+    const url = new URL(endpoint);
+    
+    // Add query parameters
+    Object.keys(params).forEach(key => {
+      url.searchParams.append(key, params[key]);
+    });
+    
     console.log(`Fetching from: ${url.toString()}`);
+    
+    const options: RequestInit = {
+      method,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': API_KEY ? `Bearer ${API_KEY}` : '',
+        // Adding CORS headers to handle cross-origin requests
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      },
+      mode: 'cors',
+    };
+    
+    if (body && (method === 'POST' || method === 'PUT')) {
+      options.body = JSON.stringify(body);
+    }
+    
     const response = await fetch(url.toString(), options);
     
     if (!response.ok) {
@@ -330,7 +336,11 @@ export const APIs = {
   // Clinics Dashboard
   getConsultationData: async (startDate: string, endDate: string, clinicId?: string): Promise<ConsultationData[]> => {
     try {
-      const endpoint = CONSULTATION_ALL_CLINIC || '/sap/opu/odata/sap/ZCDS_C_PRESCRIPTION_LIST_CDS/ZCDS_C_PRESCRIPTION_LIST';
+      const endpoint = CONSULTATION_ALL_CLINIC;
+      if (!endpoint) {
+        throw new Error('Consultation endpoint URL not found');
+      }
+      
       let filter = `DoctorID eq guid'${DOCTOR_ID}' and PrescriptionDate ge '${startDate}' and PrescriptionDate le '${endDate}' and IPDID eq guid'00000000-0000-0000-0000-000000000000' and PrescriptionDate ne ''`;
       
       if (clinicId) {
@@ -350,7 +360,11 @@ export const APIs = {
   
   getPatientData: async (startDate: string, endDate: string, clinicId?: string): Promise<PatientData[]> => {
     try {
-      const endpoint = FOLLOWUP_ALL_CLINIC || '/sap/opu/odata/sap/ZCDS_C_DOCTOR_CDS/ZCDS_C_DOCTOR_APPOINTMENT';
+      const endpoint = FOLLOWUP_ALL_CLINIC;
+      if (!endpoint) {
+        throw new Error('Follow-up endpoint URL not found');
+      }
+      
       let filter = `DoctorID eq guid'${DOCTOR_ID}' and AppointmentDate ge '${startDate}' and AppointmentDate le '${endDate}' and AppointmentDate ne '' and BookingStatus eq 'D' and FollowUp eq true`;
       
       if (clinicId) {
@@ -370,7 +384,11 @@ export const APIs = {
   
   getGenderData: async (startDate: string, endDate: string): Promise<GenderData[]> => {
     try {
-      const endpoint = CONSULTATION_ALL_CLINIC || '/sap/opu/odata/sap/ZCDS_C_PRESCRIPTION_LIST_CDS/ZCDS_C_PRESCRIPTION_LIST';
+      const endpoint = CONSULTATION_ALL_CLINIC;
+      if (!endpoint) {
+        throw new Error('Consultation endpoint URL not found');
+      }
+      
       const filter = `DoctorID eq guid'${DOCTOR_ID}' and PrescriptionDate ge '${startDate}' and PrescriptionDate le '${endDate}' and IPDID eq guid'00000000-0000-0000-0000-000000000000' and PrescriptionDate ne ''`;
       
       const response = await fetchData<any>({ 
@@ -386,7 +404,11 @@ export const APIs = {
   
   getAgeData: async (startDate: string, endDate: string): Promise<AgeData[]> => {
     try {
-      const endpoint = CONSULTATION_ALL_CLINIC || '/sap/opu/odata/sap/ZCDS_C_PRESCRIPTION_LIST_CDS/ZCDS_C_PRESCRIPTION_LIST';
+      const endpoint = CONSULTATION_ALL_CLINIC;
+      if (!endpoint) {
+        throw new Error('Consultation endpoint URL not found');
+      }
+      
       const filter = `DoctorID eq guid'${DOCTOR_ID}' and PrescriptionDate ge '${startDate}' and PrescriptionDate le '${endDate}' and IPDID eq guid'00000000-0000-0000-0000-000000000000' and PrescriptionDate ne ''`;
       
       const response = await fetchData<any>({ 
@@ -402,7 +424,11 @@ export const APIs = {
   
   getSymptomData: async (): Promise<SymptomData[]> => {
     try {
-      const endpoint = RX_ALL || '/sap/opu/odata/sap/ZCDS_C_PRESCRIPTION_LIST_CDS/ZCDS_C_PRESCRIPTION_LIST';
+      const endpoint = RX_ALL;
+      if (!endpoint) {
+        throw new Error('Rx endpoint URL not found');
+      }
+      
       const now = new Date();
       const startDate = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth() - 3, 1));
       const endDate = formatDateToYYYYMMDD(now);
@@ -437,7 +463,11 @@ export const APIs = {
   
   getDiagnosisData: async (): Promise<DiagnosisData[]> => {
     try {
-      const endpoint = RX_ALL || '/sap/opu/odata/sap/ZCDS_C_PRESCRIPTION_LIST_CDS/ZCDS_C_PRESCRIPTION_LIST';
+      const endpoint = RX_ALL;
+      if (!endpoint) {
+        throw new Error('Rx endpoint URL not found');
+      }
+      
       const now = new Date();
       const startDate = formatDateToYYYYMMDD(new Date(now.getFullYear(), now.getMonth() - 3, 1));
       const endDate = formatDateToYYYYMMDD(now);
@@ -488,7 +518,11 @@ export const APIs = {
       const formattedStartDate = formatDateToYYYYMMDD(startDate);
       const formattedEndDate = formatDateToYYYYMMDD(now);
       
-      const endpoint = APPOINTMENTS_ALL || '/sap/opu/odata/sap/ZCDS_C_DOCTOR_CDS/ZCDS_C_DOCTOR_APPOINTMENT';
+      const endpoint = APPOINTMENTS_ALL;
+      if (!endpoint) {
+        throw new Error('Appointments endpoint URL not found');
+      }
+      
       let filter = `DoctorID eq guid'${DOCTOR_ID}' and AppointmentDate ge '${formattedStartDate}' and AppointmentDate le '${formattedEndDate}' and AppointmentDate ne ''`;
       
       if (clinicId) {
@@ -523,7 +557,11 @@ export const APIs = {
       const formattedStartDate = formatDateToYYYYMMDD(startDate);
       const formattedEndDate = formatDateToYYYYMMDD(now);
       
-      const endpoint = RX_ALL || '/sap/opu/odata/sap/ZCDS_C_PRESCRIPTION_LIST_CDS/ZCDS_C_PRESCRIPTION_LIST';
+      const endpoint = RX_ALL;
+      if (!endpoint) {
+        throw new Error('Rx endpoint URL not found');
+      }
+      
       let filter = `DoctorID eq guid'${DOCTOR_ID}' and PrescriptionDate ge '${formattedStartDate}' and PrescriptionDate le '${formattedEndDate}' and PrescriptionDate ne ''`;
       
       if (clinicId) {
@@ -558,7 +596,11 @@ export const APIs = {
       const formattedStartDate = formatDateToYYYYMMDD(startDate);
       const formattedEndDate = formatDateToYYYYMMDD(now);
       
-      const endpoint = OPD_BILLING_ALL || '/sap/opu/odata/sap/ZCDS_C_BILLING_LIST_CDS/ZCDS_C_BILLING_LIST';
+      const endpoint = OPD_BILLING_ALL;
+      if (!endpoint) {
+        throw new Error('OPD Billing endpoint URL not found');
+      }
+      
       let filter = `DoctorID eq guid'${DOCTOR_ID}' and BillDate ge '${formattedStartDate}' and BillDate le '${formattedEndDate}' and BillDate ne '' and BillType ne 'P' and IPDID eq guid'00000000-0000-0000-0000-000000000000'`;
       
       if (clinicId) {
@@ -593,7 +635,11 @@ export const APIs = {
       const formattedStartDate = formatDateToYYYYMMDD(startDate);
       const formattedEndDate = formatDateToYYYYMMDD(now);
       
-      const endpoint = IPD_BILLING_ALL || '/sap/opu/odata/sap/ZCDS_C_IPD_REGISTRATION_CDS/ZCDS_C_BILLING_LIST';
+      const endpoint = IPD_BILLING_ALL;
+      if (!endpoint) {
+        throw new Error('IPD Billing endpoint URL not found');
+      }
+      
       let filter = `DoctorID eq guid'${DOCTOR_ID}' and BillDate ge '${formattedStartDate}' and BillDate le '${formattedEndDate}' and BillDate ne '' and IPDID ne guid'00000000-0000-0000-0000-000000000000'`;
       
       if (clinicId) {
@@ -628,7 +674,11 @@ export const APIs = {
       const formattedStartDate = formatDateToYYYYMMDD(startDate);
       const formattedEndDate = formatDateToYYYYMMDD(now);
       
-      const endpoint = PHARMACY_BILLING_ALL || '/sap/opu/odata/sap/ZCDS_C_BILLING_LIST_CDS/ZCDS_C_BILLING_LIST';
+      const endpoint = PHARMACY_BILLING_ALL;
+      if (!endpoint) {
+        throw new Error('Pharmacy Billing endpoint URL not found');
+      }
+      
       let filter = `DoctorID eq guid'${DOCTOR_ID}' and BillDate ge '${formattedStartDate}' and BillDate le '${formattedEndDate}' and BillDate ne '' and BillType eq 'P'`;
       
       if (clinicId) {
