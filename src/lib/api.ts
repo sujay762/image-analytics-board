@@ -1,6 +1,6 @@
 
 // API Integration
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://199.192.26.248:8000/sap/opu/odata/sap";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const API_KEY = import.meta.env.VITE_API_KEY || "";
 const DOCTOR_ID = import.meta.env.VITE_DOCTOR_ID || "00163c3a-06c9-1edf-88aa-376034cb9e31";
 
@@ -19,6 +19,12 @@ const IPD_BILLING_ALL = import.meta.env.VITE_IPD_BILLING_ALL;
 const IPD_BILLING_CLINIC = import.meta.env.VITE_IPD_BILLING_CLINIC;
 const PHARMACY_BILLING_ALL = import.meta.env.VITE_PHARMACY_BILLING_ALL;
 const PHARMACY_BILLING_CLINIC = import.meta.env.VITE_PHARMACY_BILLING_CLINIC;
+
+console.log('API Configuration:', {
+  BASE_URL: API_BASE_URL,
+  APPOINTMENTS_ALL,
+  CONSULTATION_ALL_CLINIC
+});
 
 type FetchOptions = {
   endpoint: string;
@@ -338,6 +344,7 @@ export const APIs = {
     try {
       const endpoint = CONSULTATION_ALL_CLINIC;
       if (!endpoint) {
+        console.error("Consultation endpoint URL not found in environment variables");
         throw new Error('Consultation endpoint URL not found');
       }
       
@@ -520,6 +527,7 @@ export const APIs = {
       
       const endpoint = APPOINTMENTS_ALL;
       if (!endpoint) {
+        console.error("Appointments endpoint URL not found in environment variables");
         throw new Error('Appointments endpoint URL not found');
       }
       
